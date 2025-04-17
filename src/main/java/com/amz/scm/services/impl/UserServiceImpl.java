@@ -27,14 +27,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto saveUser(UserDto user) {
-        User user1 = this.modelMapper.map(user, User.class);
+        User currUser = this.modelMapper.map(user, User.class);
 
-        user1.setEnabled(true);
-        user1.setProvider(Providers.SELF);
-        user1.setCreatedAt(new Date());
-        user1.setRoleList(List.of(AppConstants.ROLE_USER));
+        currUser.setEnabled(true);
+        currUser.setPassword(user.getPassword());
+        currUser.setProvider(Providers.SELF);
+        currUser.setCreatedAt(new Date());
+        
+        if(currUser.getUsername().startsWith("scm#admin")){
+            currUser.setRoleList(List.of(AppConstants.ROLE_ADMIN));
+        }
+        else{
+            currUser.setRoleList(List.of(AppConstants.ROLE_USER));
+        }
 
-        User savedUser = this.userRepo.save(user1);
+
+        
+
+        User savedUser = this.userRepo.save(currUser);
 
         return this.modelMapper.map(savedUser, UserDto.class);
     }
@@ -47,7 +57,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUser(UserDto user,long userId) {
+    public UserDto updateUser(UserDto user,Long userId) {
         User user1 = this.userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", String.valueOf(userId)));
 
@@ -59,6 +69,7 @@ public class UserServiceImpl implements UserService {
         oldUser.setPassword(user.getPassword());
         oldUser.setAddress(user.getAddress());
         oldUser.setAbout(user.getAbout());
+        oldUser.setPassword(user.getPassword());
 
         User updatedUser = this.modelMapper.map(oldUser, User.class);
         

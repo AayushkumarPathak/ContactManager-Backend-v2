@@ -1,0 +1,25 @@
+package com.amz.scm.services;
+
+import java.util.List;
+
+import com.amz.scm.payloads.ContactDto;
+import com.amz.scm.payloads.ContactResponse;
+
+public interface ContactService {
+
+    ContactDto createContact(ContactDto contactDto,Long user_id);
+
+    ContactDto getContactById(Long contactId);
+
+    ContactDto updateContact(Long contactId, ContactDto contactDto);
+
+    void deleteContact(Long contactId);
+
+    ContactDto getContactByEmail(Long uid ,String email);
+
+
+
+    /* This is very important method to show contacts that user created for him/her */
+    ContactResponse getAllContactsByUser(Long uid, Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
+
+}

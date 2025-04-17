@@ -1,6 +1,9 @@
 package com.amz.scm.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -20,7 +24,7 @@ public class Contact {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(nullable = false)
-    private String name;
+    private String fullName;
 
     private String email;
     private String phoneNumber;
@@ -31,13 +35,14 @@ public class Contact {
     private boolean favorite = false;
     private String websiteLink;
     private String linkedInLink;
-    // private List<String> socialLinks=new ArrayList<>();
-    private String cloudinaryImagePublicId;
+    private String cloudinaryPublicId;
+    private Date createdAt;
     @ManyToOne
     @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JsonManagedReference
     private List<SocialLink> links = new ArrayList<>();
 
 }

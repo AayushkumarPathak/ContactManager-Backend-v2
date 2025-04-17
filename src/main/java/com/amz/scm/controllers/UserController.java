@@ -18,6 +18,8 @@ import com.amz.scm.apiResponses.ApiResponseEntity;
 import com.amz.scm.payloads.UserDto;
 import com.amz.scm.services.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v2/user")
 public class UserController {
@@ -26,26 +28,24 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/test")
-    public ResponseEntity<?> testApi(){
+    public ResponseEntity<?> testApi() {
         return new ResponseEntity<>(new ApiResponseEntity<>(null, true, "API is working", null, 200), HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserDto userDto) {
         try {
             UserDto savedUser = this.userService.saveUser(userDto);
 
             return new ResponseEntity<>(
-                new ApiResponseEntity<>(savedUser, true, "User created", null, 200),
-                HttpStatus.OK
-            );
+                    new ApiResponseEntity<>(savedUser, true, "User created", null, 200),
+                    HttpStatus.OK);
 
         } catch (Exception e) {
             return new ResponseEntity<>(
-                new ApiResponseEntity<>(
-                null, false, "User not created", e.getMessage(), 500),
-                HttpStatus.INTERNAL_SERVER_ERROR
-            );
+                    new ApiResponseEntity<>(
+                            null, false, "User not created", e.getMessage(), 500),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -61,28 +61,45 @@ public class UserController {
         try {
             UserDto user = this.userService.getUserById(id);
             return new ResponseEntity<>(
-                new ApiResponseEntity<>(user, true, "User fetched", null, 200),
-                HttpStatus.OK
-            );
+                    new ApiResponseEntity<>(user, true, "User fetched", null, 200),
+                    HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(
-                new ApiResponseEntity<>(null, false, "User not found", e.getMessage(), 404),
-                HttpStatus.NOT_FOUND
-            );
+                    new ApiResponseEntity<>(null, false, "User not found", e.getMessage(), 404),
+                    HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@RequestBody UserDto userDto, long id) {
-        UserDto updatedUser = this.userService.updateUser(userDto, id);
-        return new ResponseEntity<>(new ApiResponseEntity<>(updatedUser, true, "User updated", null, 200),
-                HttpStatus.OK);
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable Long id) {
+        try {
+            UserDto updatedUser = this.userService.updateUser(userDto, id);
+            return new ResponseEntity<>(new ApiResponseEntity<>(
+                    updatedUser, 
+                    true, 
+                    "User updated",
+                    null, 
+                    200
+                ),
+                HttpStatus.OK
+            );
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    new ApiResponseEntity<>(null, false, "User not updated", e.getMessage(), 500),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(long id) {
-        this.userService.deleteUser(id);
-        return new ResponseEntity<>(new ApiResponseEntity<>(null, true, "User deleted", null, 200), HttpStatus.OK);
+        try {
+            this.userService.deleteUser(id);
+            return new ResponseEntity<>(new ApiResponseEntity<>(null, true, "User deleted", null, 200), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    new ApiResponseEntity<>(null, false, "User not deleted", e.getMessage(), 500),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     }
 
 }

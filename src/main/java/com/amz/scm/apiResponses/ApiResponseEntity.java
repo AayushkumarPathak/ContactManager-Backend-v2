@@ -1,14 +1,11 @@
 package com.amz.scm.apiResponses;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
 @Setter
 @Getter
-
 public class ApiResponseEntity<T> implements ApiResponse<T>{
 
     private boolean success;

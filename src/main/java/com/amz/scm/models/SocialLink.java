@@ -1,5 +1,8 @@
 package com.amz.scm.models;
 
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,5 +20,7 @@ public class SocialLink {
 
 
     @ManyToOne
+    @JoinColumn(name = "contact_id")
+    @JsonBackReference
     private Contact contact;
 }
