@@ -1,5 +1,6 @@
 package com.amz.scm.exceptions;
 
+@SuppressWarnings("unused")
 public class ResourceNotFoundException extends RuntimeException{
     private String resourceName;
     private String fieldName;

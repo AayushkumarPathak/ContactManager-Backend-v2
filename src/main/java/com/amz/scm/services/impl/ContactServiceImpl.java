@@ -4,27 +4,24 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.amz.scm.exceptions.ApiException;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Page;
+
+import com.amz.scm.exceptions.ApiException;
 import com.amz.scm.exceptions.ResourceNotFoundException;
 import com.amz.scm.models.Contact;
 import com.amz.scm.models.SocialLink;
 import com.amz.scm.models.User;
 import com.amz.scm.payloads.ContactDto;
 import com.amz.scm.payloads.ContactResponse;
-import com.amz.scm.payloads.UserDto;
 import com.amz.scm.repositories.ContactRepo;
 import com.amz.scm.repositories.UserRepo;
 import com.amz.scm.services.ContactService;
-
-import jakarta.persistence.PostRemove;
 
 
 @Service

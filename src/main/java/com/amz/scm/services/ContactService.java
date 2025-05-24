@@ -1,7 +1,5 @@
 package com.amz.scm.services;
 
-import java.util.List;
-
 import com.amz.scm.payloads.ContactDto;
 import com.amz.scm.payloads.ContactResponse;
 
