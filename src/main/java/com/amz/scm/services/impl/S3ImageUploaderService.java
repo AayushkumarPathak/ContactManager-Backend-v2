@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.HttpMethod;
@@ -17,6 +18,7 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amz.scm.exceptions.ImageUploadException;
 import com.amz.scm.services.ImageUploader;
 
+@Service
 public class S3ImageUploaderService implements ImageUploader {
 
     @Autowired
@@ -62,7 +64,7 @@ public class S3ImageUploaderService implements ImageUploader {
                 imageFileName).withMethod(HttpMethod.GET);
 
         URL imageS3Url = client.generatePresignedUrl(generatePresignedUrlRequest);
-        return imageFileName.toString();
+        return imageS3Url.toString();
     }
 
 }
