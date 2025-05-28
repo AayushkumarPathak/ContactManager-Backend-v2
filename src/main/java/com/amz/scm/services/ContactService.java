@@ -1,13 +1,15 @@
 package com.amz.scm.services;
 
-import java.util.List;
+
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.amz.scm.payloads.ContactDto;
 import com.amz.scm.payloads.ContactResponse;
 
 public interface ContactService {
 
-    ContactDto createContact(ContactDto contactDto,Long user_id);
+    ContactDto createContact(ContactDto contactDto,Long user_id, MultipartFile imageFile);
 
     ContactDto getContactById(Long contactId);
 

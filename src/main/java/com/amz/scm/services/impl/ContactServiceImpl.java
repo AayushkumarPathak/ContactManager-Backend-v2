@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.domain.Page;
 import com.amz.scm.exceptions.ResourceNotFoundException;
 import com.amz.scm.models.Contact;
@@ -19,12 +20,10 @@ import com.amz.scm.models.SocialLink;
 import com.amz.scm.models.User;
 import com.amz.scm.payloads.ContactDto;
 import com.amz.scm.payloads.ContactResponse;
-import com.amz.scm.payloads.UserDto;
 import com.amz.scm.repositories.ContactRepo;
 import com.amz.scm.repositories.UserRepo;
 import com.amz.scm.services.ContactService;
-
-import jakarta.persistence.PostRemove;
+import com.amz.scm.services.ImageUploader;
 
 
 @Service
@@ -39,16 +38,30 @@ public class ContactServiceImpl implements ContactService {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private ImageUploader s3Service;
+
     @Override
-    public ContactDto createContact(ContactDto contactDto, Long user_id) {
+    public ContactDto createContact(ContactDto contactDto, Long user_id,MultipartFile imageFile) {
 
         User user = this.userRepo.findById(user_id).orElseThrow(()-> new ResourceNotFoundException("user", "user_id", String.valueOf(user_id)));
 
         Contact currContact = this.modelMapper.map(contactDto, Contact.class);
 
-        currContact.setPicture("default.png");
+        // currContact.setPicture("default.png");
         currContact.setCreatedAt(new Date());
         currContact.setUser(user);
+
+        if(imageFile!=null && !imageFile.isEmpty()){
+            String s3Url = s3Service.uploadImage(imageFile);
+            currContact.setPicture(s3Url);
+        }
+        else{
+            String deafultUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL0ZPaTrhUTirOwz7dEn4sxkCE-wZQsZljqg&s";
+
+            contactDto.setPicture(deafultUrl);
+        }
+
 
         List<SocialLink> updatedLinks = contactDto.getLinks();
         updatedLinks.forEach(link -> link.setContact(currContact));
