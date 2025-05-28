@@ -25,6 +25,7 @@ import com.amz.scm.payloads.ContactDto;
 import com.amz.scm.payloads.ContactResponse;
 import com.amz.scm.services.ContactService;
 // import com.amz.scm.services.FileService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/api/v2/contact")
@@ -49,12 +50,16 @@ public class ContactController {
     @PostMapping(value = "/{userid}", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponseEntity<?>> 
     createContact(
-        @RequestPart("contact") ContactDto contact,
-        @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,@PathVariable Long userid
+        @RequestParam("contactDto") String contactDtoStr,
+        @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
+        @PathVariable Long userid
     )
     {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ContactDto contactDto;
         try {
-            ContactDto savedContact = this.contactService.createContact(contact, userid,imageFile);
+            contactDto = objectMapper.readValue(contactDtoStr, ContactDto.class);
+            ContactDto savedContact = this.contactService.createContact(contactDto, userid,imageFile);
             return new ResponseEntity<>(
                 new ApiResponseEntity<>(savedContact, true, "Contact created successfully", null, 200),
                 HttpStatus.OK

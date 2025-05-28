@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.validator.constraints.Length;
+
 import com.amz.scm.models.SocialLink;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -32,6 +34,8 @@ public class ContactDto {
 
     @NotBlank(message = "Address is required")
     private String address;
+
+    
     private String picture;
 
     @Size(max = 1000, message = "Description must be less than 1000 characters")

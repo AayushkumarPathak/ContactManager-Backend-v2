@@ -28,6 +28,8 @@ public class Contact {
     private String email;
     private String phoneNumber;
     private String address;
+
+    @Column(length = 512)
     private String picture;
     @Column(length = 1000)
     private String description;
