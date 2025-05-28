@@ -10,4 +10,6 @@ public interface ImageUploader {
 
     String preSignedUrl(String imageFileName);
 
+    void deleteImage(String imageFileName);
+
 }

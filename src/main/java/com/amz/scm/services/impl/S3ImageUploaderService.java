@@ -67,4 +67,18 @@ public class S3ImageUploaderService implements ImageUploader {
         return imageS3Url.toString();
     }
 
+    @Override
+    public void deleteImage(String imageFileName) {
+    
+        if(imageFileName == null || imageFileName.isEmpty()){
+            throw new ImageUploadException("Unable to delete the image with file name:  "+imageFileName+"  "+"S3ImageUploaderService");
+        }
+        try{
+            client.deleteObject(bucketName,imageFileName);
+        }
+        catch(RuntimeException e){
+             throw new ImageUploadException(e.getMessage()+"  "+"S3ImageUploaderService");
+        }
+    }
+
 }

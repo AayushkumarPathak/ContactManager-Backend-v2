@@ -1,0 +1,66 @@
+package com.amz.scm.admin.controller;
+
+import org.apache.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.amz.scm.apiResponses.ApiResponseEntity;
+import com.amz.scm.exceptions.ImageUploadException;
+import com.amz.scm.services.ImageUploader;
+
+@RestController
+@RequestMapping("/api/v2/admin")
+public class AdminController {
+
+    @Autowired
+    private ImageUploader s3ServiceClient;
+
+
+    @GetMapping("/testapi")
+    public ResponseEntity<?> testAdminApi(){
+
+        ApiResponseEntity<String> responseEntity = new ApiResponseEntity<String>("",true,"Admin Api working",null,200);
+        
+        
+        return ResponseEntity.ok(responseEntity);
+    }
+
+
+    @DeleteMapping("/deleteObj/{imageFileName}")
+    public ResponseEntity<?> deleteImageFromS3(String imageFileName){
+
+        try {
+        this.s3ServiceClient.deleteImage(imageFileName);
+
+        ApiResponseEntity<String> responseEntity = new ApiResponseEntity<>(
+            "",                         // data (can return deleted file name if needed)
+            true,                       // success
+            "Image deleted successfully from S3",  // message
+            null,                       // errors
+            200                         // statusCode
+        );
+
+        return ResponseEntity.ok(responseEntity);
+
+    } catch (Exception e) {
+        ApiResponseEntity<String> errorResponse = new ApiResponseEntity<>(
+            null,
+            false,
+            "Failed to delete image from S3",
+            e.getMessage(),
+            500
+        );
+
+        return ResponseEntity.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+        
+    }
+
+
+
+}
