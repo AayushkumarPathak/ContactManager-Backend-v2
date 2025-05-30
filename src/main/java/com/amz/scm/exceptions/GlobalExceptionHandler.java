@@ -44,6 +44,7 @@ public class GlobalExceptionHandler {
         responseEntity.setMessage(msg);
         responseEntity.setStatusCode(400);
         responseEntity.setData(null);
+        responseEntity.setErrors(ex.getMessage());
 
         return new ResponseEntity<>(responseEntity,HttpStatus.BAD_REQUEST);
     }

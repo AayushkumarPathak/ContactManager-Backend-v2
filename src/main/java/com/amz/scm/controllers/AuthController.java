@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -54,7 +55,7 @@ public class AuthController {
 
             return new ResponseEntity<JwtAuthResponse>(response, HttpStatus.OK);
         } catch (Exception e) {
-           throw new ApiException("Unable to create token for this user with email: " + request.getUsername() + "\n" + "Please try again!!");
+           throw new ApiException("Invalid email or password Please try again!!");
         }
       
     }
@@ -65,9 +66,9 @@ public class AuthController {
         try{
             this.authenticationManager.authenticate(authenticationToken);
         }
-        catch(Exception e){
+        catch(BadCredentialsException e){
             System.out.println("Invalid Credentials");
-           throw new ApiException("Invalid Credentials");
+           throw new ApiException("Invalid email or password. Try Again");
         }
     }
 

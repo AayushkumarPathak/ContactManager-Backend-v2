@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -75,14 +76,12 @@ public class UserController {
         try {
             UserDto updatedUser = this.userService.updateUser(userDto, id);
             return new ResponseEntity<>(new ApiResponseEntity<>(
-                    updatedUser, 
-                    true, 
+                    updatedUser,
+                    true,
                     "User updated",
-                    null, 
-                    200
-                ),
-                HttpStatus.OK
-            );
+                    null,
+                    200),
+                    HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(
                     new ApiResponseEntity<>(null, false, "User not updated", e.getMessage(), 500),
@@ -90,16 +89,18 @@ public class UserController {
         }
     }
 
+    // ONLY ADMIN CAN DELETE USER -> {}
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(long id) {
+    public ResponseEntity<?> deleteUser(@PathVariable long id) {
         try {
             this.userService.deleteUser(id);
-            return new ResponseEntity<>(new ApiResponseEntity<>(null, true, "User deleted", null, 200), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponseEntity<>(null, true, "User deleted", null, HttpStatus.OK.value()), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(
                     new ApiResponseEntity<>(null, false, "User not deleted", e.getMessage(), 500),
                     HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+        }
     }
 
 }
