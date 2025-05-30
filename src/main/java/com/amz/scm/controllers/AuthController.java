@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.amz.scm.apiResponses.ApiResponseEntity;
 import com.amz.scm.exceptions.ApiException;
 import com.amz.scm.models.User;
 import com.amz.scm.payloads.JwtAuthRequest;
 import com.amz.scm.payloads.JwtAuthResponse;
 import com.amz.scm.payloads.UserDto;
 import com.amz.scm.security.JwtTokenHelper;
+import com.amz.scm.services.UserService;
 
 @RestController
 @RequestMapping("/api/v2/auth")
@@ -36,6 +38,25 @@ public class AuthController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/register")
+    public ResponseEntity<ApiResponseEntity<?>> registerUser(@RequestBody UserDto userDto){
+        UserDto registeredUser = this.userService.registerUser(userDto);
+
+        ApiResponseEntity<UserDto> res = new ApiResponseEntity<>();
+        
+        res.setData(registeredUser);
+        res.setErrors(null);
+        res.setMessage("User registered successfully");
+        res.setSuccess(true);
+        res.setStatusCode(HttpStatus.CREATED.value());
+
+        return new ResponseEntity<>(res,HttpStatus.OK);
+    }
+
 
 
     @PostMapping("/login")

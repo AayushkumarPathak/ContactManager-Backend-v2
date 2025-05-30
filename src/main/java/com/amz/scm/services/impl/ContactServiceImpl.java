@@ -48,6 +48,8 @@ public class ContactServiceImpl implements ContactService {
 
         Contact currContact = this.modelMapper.map(contactDto, Contact.class);
 
+        
+
         // currContact.setPicture("default.png");
         currContact.setCreatedAt(new Date());
         currContact.setUser(user);

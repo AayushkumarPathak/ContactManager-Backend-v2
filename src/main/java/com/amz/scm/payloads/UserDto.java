@@ -9,7 +9,9 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.amz.scm.models.Providers;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -43,7 +45,8 @@ public class UserDto {
     private Date createdAt; //set at runtime
     private Providers provider; //set at runtime
     
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<String> roleList = new ArrayList<>();
+    // @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    // private List<String> roleList = new ArrayList<>();
 
+    private Set<RoleDto> roles = new HashSet<>();
 }

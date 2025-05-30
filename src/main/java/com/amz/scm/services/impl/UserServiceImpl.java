@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.amz.scm.exceptions.ResourceNotFoundException;
@@ -16,6 +17,7 @@ import com.amz.scm.models.Providers;
 import com.amz.scm.models.Role;
 import com.amz.scm.models.User;
 import com.amz.scm.payloads.UserDto;
+import com.amz.scm.repositories.RoleRepo;
 import com.amz.scm.repositories.UserRepo;
 import com.amz.scm.services.UserService;
 
@@ -27,6 +29,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepo roleRepo;
 
     @Override
     public UserDto saveUser(UserDto user) {
@@ -126,5 +134,29 @@ public class UserServiceImpl implements UserService {
         User user = this.userRepo.findByEmail(email).orElseThrow(() ->
                 new ResourceNotFoundException("User", "email", email));
         return this.modelMapper.map(user, UserDto.class);
+    }
+
+    @Override
+    public UserDto registerUser(UserDto userDto) {
+       
+        User user = this.modelMapper.map(userDto, User.class);
+
+        //handle password encryption
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+
+        user.setCreatedAt(new Date());
+        user.setProvider(Providers.SELF);
+        user.setEnabled(true);
+        
+        //handle role
+        Role role = this.roleRepo.findById(AppConstants.NORMAL_USER).get();
+        
+        user.getRoles().add(role);
+
+
+        User savedUser = this.userRepo.save(user);
+
+        return this.modelMapper.map(savedUser, UserDto.class);
+
     }
 }

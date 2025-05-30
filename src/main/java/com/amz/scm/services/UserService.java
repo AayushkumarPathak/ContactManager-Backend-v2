@@ -6,6 +6,10 @@ import java.util.List;
 
 
 public interface UserService {
+
+
+    UserDto registerUser(UserDto userDto);
+
     UserDto saveUser(UserDto user);
 
     UserDto getUserById(long id);
