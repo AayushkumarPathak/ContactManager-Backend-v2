@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.amz.scm.exceptions.ResourceNotFoundException;
 import com.amz.scm.models.User;
 import com.amz.scm.repositories.UserRepo;
 
@@ -17,10 +18,9 @@ public class CustomUserDetailService implements UserDetailsService {
     private  UserRepo userRepo;
 
     @Override                             // username is email in this case
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     
-    
-        User user = this.userRepo.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
+        User user = this.userRepo.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User", "email: " , email));
 
         return user;
     }

@@ -59,7 +59,7 @@ public class ContactServiceImpl implements ContactService {
         else{
             String deafultUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL0ZPaTrhUTirOwz7dEn4sxkCE-wZQsZljqg&s";
 
-            contactDto.setPicture(deafultUrl);
+            currContact.setPicture(deafultUrl);
         }
 
 
