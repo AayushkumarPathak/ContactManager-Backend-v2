@@ -1,7 +1,9 @@
 package com.amz.scm.services.impl;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.amz.scm.exceptions.ResourceNotFoundException;
 import com.amz.scm.helpers.AppConstants;
 import com.amz.scm.models.Providers;
+import com.amz.scm.models.Role;
 import com.amz.scm.models.User;
 import com.amz.scm.payloads.UserDto;
 import com.amz.scm.repositories.UserRepo;
@@ -35,10 +38,16 @@ public class UserServiceImpl implements UserService {
         currUser.setCreatedAt(new Date());
         
         if(currUser.getUsername().startsWith("scm#admin")){
-            currUser.setRoleList(List.of(AppConstants.ROLE_ADMIN));
+
+            Set<Role> myrole = new HashSet<>();
+            myrole.add(new Role(201, "ROLE_ADMIN"));
+
+            currUser.setRoles(myrole);
         }
         else{
-            currUser.setRoleList(List.of(AppConstants.ROLE_USER));
+            Set<Role> myrole = new HashSet<>();
+            myrole.add(new Role(202, "NORMAL_USER"));
+            currUser.setRoles(myrole);
         }
 
 

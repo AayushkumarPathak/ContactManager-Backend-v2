@@ -2,15 +2,15 @@ package com.amz.scm.admin.controller;
 
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amz.scm.apiResponses.ApiResponseEntity;
-import com.amz.scm.exceptions.ImageUploadException;
 import com.amz.scm.services.ImageUploader;
 
 @RestController
@@ -31,18 +31,18 @@ public class AdminController {
     }
 
 
-    @DeleteMapping("/deleteObj/{imageFileName}")
-    public ResponseEntity<?> deleteImageFromS3(String imageFileName){
+    @DeleteMapping("/deleteObj")
+    public ResponseEntity<?> deleteImageFromS3(@RequestParam String imageFileName){
 
         try {
         this.s3ServiceClient.deleteImage(imageFileName);
 
         ApiResponseEntity<String> responseEntity = new ApiResponseEntity<>(
-            "",                         // data (can return deleted file name if needed)
-            true,                       // success
-            "Image deleted successfully from S3",  // message
-            null,                       // errors
-            200                         // statusCode
+            "",                         
+            true,                      
+            "Image deleted successfully from S3", 
+            null,                      
+            200                        
         );
 
         return ResponseEntity.ok(responseEntity);
