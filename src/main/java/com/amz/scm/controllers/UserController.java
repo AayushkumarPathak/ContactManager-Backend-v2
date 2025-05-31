@@ -35,6 +35,18 @@ public class UserController {
 
     @PostMapping("/")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserDto userDto) {
+        //check user that with username or email already exists then return user already exists
+
+        boolean isUserExists = this.userService.checkUserAlreadyExists(userDto.getUsername(), userDto.getEmail());
+
+        if(isUserExists){
+             return new ResponseEntity<>(
+                new ApiResponseEntity<>(null, false, "User with given email or username already exists", null, 409),
+                HttpStatus.CONFLICT);
+        }
+
+
+
         try {
             UserDto savedUser = this.userService.saveUser(userDto);
 

@@ -43,24 +43,31 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponseEntity<?>> registerUser(@RequestBody UserDto userDto){
+    public ResponseEntity<ApiResponseEntity<?>> registerUser(@RequestBody UserDto userDto) {
+        boolean isUserExists = this.userService.checkUserAlreadyExists(userDto.getUsername(), userDto.getEmail());
+
+        if (isUserExists) {
+            return new ResponseEntity<>(
+                    new ApiResponseEntity<>(null, false, "User with given email or username already exists", null, 409),
+                    HttpStatus.CONFLICT
+            );
+        }
+
         UserDto registeredUser = this.userService.registerUser(userDto);
 
         ApiResponseEntity<UserDto> res = new ApiResponseEntity<>();
-        
+
         res.setData(registeredUser);
         res.setErrors(null);
         res.setMessage("User registered successfully");
         res.setSuccess(true);
         res.setStatusCode(HttpStatus.CREATED.value());
 
-        return new ResponseEntity<>(res,HttpStatus.OK);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-
-
     @PostMapping("/login")
-    public ResponseEntity<JwtAuthResponse> createToken(@RequestBody JwtAuthRequest request){
+    public ResponseEntity<JwtAuthResponse> createToken(@RequestBody JwtAuthRequest request) {
 
         try {
             // We're using email as the username
@@ -72,24 +79,24 @@ public class AuthController {
 
             JwtAuthResponse response = new JwtAuthResponse();
             response.setToken(token);
-            response.setUserDto(this.modelMapper.map((User)userDetails, UserDto.class));
+            response.setUserDto(this.modelMapper.map((User) userDetails, UserDto.class));
 
             return new ResponseEntity<JwtAuthResponse>(response, HttpStatus.OK);
         } catch (Exception e) {
-           throw new ApiException("Invalid email or password Please try again!!");
+            throw new ApiException("Invalid email or password Please try again!!");
         }
-      
+
     }
 
-    private void authenticate(String email, String password) throws Exception{
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
+    private void authenticate(String email, String password) throws Exception {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email,
+                password);
 
-        try{
+        try {
             this.authenticationManager.authenticate(authenticationToken);
-        }
-        catch(BadCredentialsException e){
+        } catch (BadCredentialsException e) {
             System.out.println("Invalid Credentials");
-           throw new ApiException("Invalid email or password. Try Again");
+            throw new ApiException("Invalid email or password. Try Again");
         }
     }
 

@@ -3,6 +3,7 @@ package com.amz.scm.services.impl;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -158,5 +159,13 @@ public class UserServiceImpl implements UserService {
 
         return this.modelMapper.map(savedUser, UserDto.class);
 
+    }
+
+    @Override
+    public boolean checkUserAlreadyExists(String username, String email) {
+        boolean emailExists  = this.userRepo.findByEmail(email).isPresent();
+        boolean usernameExists  = this.userRepo.findByUsername(username).isPresent();
+
+        return emailExists  || usernameExists ;
     }
 }

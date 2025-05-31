@@ -10,6 +10,8 @@ public interface UserService {
 
     UserDto registerUser(UserDto userDto);
 
+    boolean checkUserAlreadyExists(String username, String email);
+
     UserDto saveUser(UserDto user);
 
     UserDto getUserById(long id);
