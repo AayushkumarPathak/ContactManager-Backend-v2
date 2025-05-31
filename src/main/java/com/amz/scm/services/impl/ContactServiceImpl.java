@@ -176,5 +176,12 @@ public class ContactServiceImpl implements ContactService {
 
         return contactResponse;
     }
+
+    @Override
+    public boolean checkContactExistsWithFullname(String fullname) {
+       boolean isExistByFullname = this.contactRepo.findByFullName(fullname).isPresent();
+
+       return isExistByFullname;
+    }
     
 }

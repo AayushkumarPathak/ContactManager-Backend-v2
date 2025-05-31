@@ -35,12 +35,20 @@ public class SecurityConfig {
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     public static final String[] PUBLIC_URLS = { 
-            "/api/v2/auth/**",
+           "/api/v2/auth/**",
+            "/v3/api-docs",
             "/v3/api-docs/**",
-            "/v2/api-docs",
-            "/swagger-resources/**",
             "/swagger-ui/**",
-            "/webjars/**"
+            "/swagger-ui.html",
+            "/swagger-resources/**",
+            "/webjars/**",  
+            "/api-docs/**",
+            "/v3/api-docs/swagger-config",
+           
+           
+            
+            
+            
     };
 
 
@@ -60,8 +68,7 @@ public class SecurityConfig {
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         )
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-        .authenticationProvider(daoAuthenticationProvider())  
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)  
         .build();
     }
 

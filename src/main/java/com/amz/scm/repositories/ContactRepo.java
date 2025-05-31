@@ -4,6 +4,8 @@ import com.amz.scm.models.Contact;
 import com.amz.scm.payloads.ContactDto;
 import com.amz.scm.payloads.UserDto;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +17,10 @@ public interface ContactRepo extends JpaRepository<Contact, Long> {
 
     // Main method to fetch and show all contacts that user stored 
     Page<Contact> findByUserId(Long contact_id, Pageable pageable);
+
+    Optional<Contact> findByEmail(String email);
+    Optional<Contact> findByFullName(String fullname);
+
 
     ContactDto findByUserIdAndEmail(Long uid, String email);
 

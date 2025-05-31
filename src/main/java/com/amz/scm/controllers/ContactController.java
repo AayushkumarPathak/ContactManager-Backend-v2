@@ -58,10 +58,23 @@ public class ContactController {
         // Validate user access
         validateUserAccess(userid);
 
+        
+
         ObjectMapper objectMapper = new ObjectMapper();
         ContactDto contactDto;
         try {
+
             contactDto = objectMapper.readValue(contactDtoStr, ContactDto.class);
+
+            boolean isContactExistsWithFullname = this.contactService.checkContactExistsWithFullname(contactDto.getFullName());
+
+             if(isContactExistsWithFullname){
+                return new ResponseEntity<>(
+                    new ApiResponseEntity<>(null, false, "Contact with given fullName  already exists Use Unique Name", null, 409),
+                    HttpStatus.CONFLICT
+                );
+            }
+
             ContactDto savedContact = this.contactService.createContact(contactDto, userid, imageFile);
             return new ResponseEntity<>(
                 new ApiResponseEntity<>(savedContact, true, "Contact created successfully", null, 200),

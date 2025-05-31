@@ -1,8 +1,9 @@
 package com.amz.scm.security;
 
-
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +23,41 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-   private final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+
+    private static final List<String> WHITELISTED_PATHS = Arrays.asList(
+            "/api/v2/auth",
+                "/v3/api-docs",
+                "/v3/api-docs/swagger-config",
+                "/swagger-ui",
+                "/swagger-ui/",
+                "/swagger-ui.html",
+                "/swagger-resources",
+                "/swagger-resources/",
+                "/webjars",
+                "/webjars/"
+    );
+
+    
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+         String path = request.getRequestURI();
+
+        return path.startsWith("/v3/api-docs") ||
+           path.startsWith("/swagger-ui") ||
+           path.startsWith("/swagger-resources") ||
+           path.startsWith("/webjars") ||
+           path.startsWith("/api-docs") || 
+           path.startsWith("/api/v2/auth");
+    }
+
+    private boolean isWhitelisted(String path) {
+        return WHITELISTED_PATHS.stream().anyMatch(path::startsWith);
+    }
+
+    private final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -33,25 +65,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenHelper jwtTokenHelper;
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+            HttpServletResponse response,
+            FilterChain filterChain)
             throws ServletException, IOException {
 
-//		1. get token
+        // String path = request.getRequestURI();
+        // System.out.println("Request URI: " + path);
+
+        // if (isWhitelisted(path)) {
+        //     filterChain.doFilter(request, response);
+        //     return;
+        // }
+
+        // 1. get token
 
         String requestToken = request.getHeader("Authorization");
         Enumeration<String> headerNames = request.getHeaderNames();
 
-        while(headerNames.hasMoreElements())
-        {
+        while (headerNames.hasMoreElements()) {
             System.out.println(headerNames.nextElement());
         }
         // Bearer 2352523sdgsg
 
-        System.out.println("Jwt Auth filter:  Req Token: "+requestToken);
+        System.out.println("Jwt Auth filter:  Req Token: " + requestToken);
 
         String username = null;
 
@@ -73,7 +111,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
         } else {
-            logger.error("Error at JWTAuthFilter: ","Jwt token does not begin with Bearer");
+            logger.error("Error at JWTAuthFilter: ", "Jwt token does not begin with Bearer");
             System.out.println("Jwt token does not begin with Bearer");
         }
 
@@ -101,10 +139,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             System.out.println("username is null or context is not null");
         }
 
-
         filterChain.doFilter(request, response);
     }
-
-
 
 }

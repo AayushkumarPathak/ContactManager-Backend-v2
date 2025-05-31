@@ -19,6 +19,8 @@ public interface ContactService {
 
     ContactDto getContactByEmail(Long uid ,String email);
 
+    boolean checkContactExistsWithFullname(String fullname);
+
 
 
     /* This is very important method to show contacts that user created for him/her */
