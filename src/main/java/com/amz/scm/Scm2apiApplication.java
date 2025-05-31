@@ -2,6 +2,7 @@ package com.amz.scm;
 
 import java.util.List;
 
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -41,25 +42,31 @@ public class Scm2apiApplication implements CommandLineRunner {
 
 
         try {
-            Role roleAdmin = new Role();
-            roleAdmin.setId(AppConstants.ADMIN_USER);
-            roleAdmin.setName(AppConstants.ROLE_ADMIN);
-            
-            
-            Role roleNormal = new Role();
-            roleNormal.setId(AppConstants.NORMAL_USER);
-            roleNormal.setName(AppConstants.ROLE_USER);
 
-            List<Role> roles = List.of(roleAdmin,roleNormal);
+            boolean isAdminRoleAlreadyExists = this.roleRepo.findById(AppConstants.ADMIN_USER).isPresent();
+             boolean isUserRoleAlreadyExists = this.roleRepo.findById(AppConstants.NORMAL_USER).isPresent();
 
-            List<Role> savedRoles = this.roleRepo.saveAll(roles);
+            if(!isAdminRoleAlreadyExists && !isUserRoleAlreadyExists){
+                Role roleAdmin = new Role();
+                roleAdmin.setId(AppConstants.ADMIN_USER);
+                roleAdmin.setName(AppConstants.ROLE_ADMIN);
+                
+                
+                Role roleNormal = new Role();
+                roleNormal.setId(AppConstants.NORMAL_USER);
+                roleNormal.setName(AppConstants.ROLE_USER);
 
-            savedRoles.forEach(r->{
-                System.out.println(
-                    r.getId()+ " "+
-                    r.getName()
-                );
-            });
+                List<Role> roles = List.of(roleAdmin,roleNormal);
+
+                List<Role> savedRoles = this.roleRepo.saveAll(roles);
+
+                savedRoles.forEach(r->{
+                    System.out.println(
+                        r.getId()+ " "+
+                        r.getName()
+                    );
+                });
+            }
 
 
         } catch (Exception e) {

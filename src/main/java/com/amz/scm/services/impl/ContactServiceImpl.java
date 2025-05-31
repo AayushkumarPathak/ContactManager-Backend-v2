@@ -178,8 +178,8 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public boolean checkContactExistsWithFullname(String fullname) {
-       boolean isExistByFullname = this.contactRepo.findByFullName(fullname).isPresent();
+    public boolean checkContactExistsWithFullname(String fullname, long user_id) {
+       boolean isExistByFullname = this.contactRepo.findByFullNameAndUser_Id(fullname,user_id).isPresent();
 
        return isExistByFullname;
     }

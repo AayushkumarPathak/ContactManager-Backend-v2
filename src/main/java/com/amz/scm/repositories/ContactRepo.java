@@ -20,6 +20,8 @@ public interface ContactRepo extends JpaRepository<Contact, Long> {
 
     Optional<Contact> findByEmail(String email);
     Optional<Contact> findByFullName(String fullname);
+    Optional<Contact> findByFullNameAndUser_Id(String fullName, Long userId);
+
 
 
     ContactDto findByUserIdAndEmail(Long uid, String email);

@@ -66,7 +66,7 @@ public class ContactController {
 
             contactDto = objectMapper.readValue(contactDtoStr, ContactDto.class);
 
-            boolean isContactExistsWithFullname = this.contactService.checkContactExistsWithFullname(contactDto.getFullName());
+            boolean isContactExistsWithFullname = this.contactService.checkContactExistsWithFullname(contactDto.getFullName(),userid);
 
              if(isContactExistsWithFullname){
                 return new ResponseEntity<>(

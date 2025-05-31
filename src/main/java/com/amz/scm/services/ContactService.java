@@ -19,7 +19,7 @@ public interface ContactService {
 
     ContactDto getContactByEmail(Long uid ,String email);
 
-    boolean checkContactExistsWithFullname(String fullname);
+    boolean checkContactExistsWithFullname(String fullname, long user_id);
 
 
 
