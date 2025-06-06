@@ -7,7 +7,6 @@ A secure cloud-based contact management system that allows users to safely store
 ## 🔗 Previous Version (v1)
 
 - **Repository:** [Contact Manager v1 - GitHub](https://github.com/AayushkumarPathak/Contact-Manager)  
-  *(Replace with the actual link to your previous version's repo)*
 
 ---
 
@@ -21,7 +20,7 @@ A secure cloud-based contact management system that allows users to safely store
 | **Cloud Storage** | ❌ | ✅ AWS S3 for profile images |
 | **API Architecture** | REST Controller | Improved REST API for frontend communication |
 | **UI Responsiveness** | Thymeleaf-based responsive design | Fully responsive SPA using React |
-| **Profile Image Support** | ❌ | ✅ Upload and retrieve profile pictures |
+| **Contact Image Support** | ❌ | ✅ Upload and retrieve contact pictures |
 | **Frontend-Backend Communication** | Direct rendering with Thymeleaf | API-based using Axios |
 | **Security** | Basic | Enhanced data privacy with secure token/session-based access |
 
