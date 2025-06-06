@@ -6,7 +6,7 @@ A secure cloud-based contact management system that allows users to safely store
 
 ## 🔗 Previous Version (v1)
 
-- **Repository:** [Contact Manager v1 - GitHub](https://github.com/your-username/contact-manager-v1)  
+- **Repository:** [Contact Manager v1 - GitHub](https://github.com/AayushkumarPathak/Contact-Manager)  
   *(Replace with the actual link to your previous version's repo)*
 
 ---
