@@ -2,6 +2,7 @@ package com.amz.scm.services.impl;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -27,6 +29,7 @@ public class S3ImageUploaderService implements ImageUploader {
     @Value("${app.s3.bucket}")
     private String bucketName;
 
+    /* 
     @Override
     public String uploadImage(MultipartFile imageFile) {
 
@@ -47,8 +50,13 @@ public class S3ImageUploaderService implements ImageUploader {
 
         try {
             PutObjectResult putObjectResult = client.putObject(
-                    new PutObjectRequest(bucketName, customImageFileName, imageFile.getInputStream(), metadata));
-
+                    new PutObjectRequest(
+                        bucketName, customImageFileName, 
+                        imageFile.getInputStream(), 
+                        metadata
+                    )
+            );
+            
             return this.preSignedUrl(customImageFileName);
 
         } catch (IOException e) {
@@ -56,12 +64,50 @@ public class S3ImageUploaderService implements ImageUploader {
         }
 
     }
+    */
+
+    @Override
+public String uploadImage(MultipartFile imageFile) {
+    if (imageFile == null) {
+        throw new ImageUploadException("Image is null");
+    }
+
+    String originalFilename = imageFile.getOriginalFilename();
+    if (originalFilename == null) {
+        throw new ImageUploadException("Original filename is null");
+    }
+
+    String uniqueFileName = UUID.randomUUID().toString()
+        + originalFilename.substring(originalFilename.lastIndexOf("."));
+
+    ObjectMetadata metadata = new ObjectMetadata();
+    metadata.setContentLength(imageFile.getSize());
+
+    try {
+        PutObjectRequest request = new PutObjectRequest(
+            bucketName, uniqueFileName,
+            imageFile.getInputStream(), metadata
+        );
+
+        client.putObject(request);
+
+        String fileUrl = "https://" + bucketName + ".s3.amazonaws.com/" + uniqueFileName;
+        return fileUrl;
+
+    } catch (IOException e) {
+        throw new ImageUploadException("Error uploading image: " + e.getMessage());
+    }
+}
 
     @Override
     public String preSignedUrl(String imageFileName) {
+        Date expiration = new Date();
+        long expTimeMillis = System.currentTimeMillis();
+        expTimeMillis += 1000 * 60 * 60 * 24 * 7; // 7 days
+        expiration.setTime(expTimeMillis);
 
         GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucketName,
-                imageFileName).withMethod(HttpMethod.GET);
+                imageFileName).withMethod(HttpMethod.GET).withExpiration(expiration);
 
         URL imageS3Url = client.generatePresignedUrl(generatePresignedUrlRequest);
         return imageS3Url.toString();

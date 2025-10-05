@@ -2,6 +2,8 @@ package com.amz.scm.services;
 
 
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amz.scm.payloads.ContactDto;
@@ -20,7 +22,6 @@ public interface ContactService {
     ContactDto getContactByEmail(Long uid ,String email);
 
     boolean checkContactExistsWithFullname(String fullname, long user_id);
-
 
 
     /* This is very important method to show contacts that user created for him/her */

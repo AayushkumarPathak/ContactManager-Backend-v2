@@ -28,11 +28,20 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Api to test infra setup
+     * @return
+     */
     @GetMapping("/test")
     public ResponseEntity<?> testApi() {
         return new ResponseEntity<>(new ApiResponseEntity<>(null, true, "API is working", null, 200), HttpStatus.OK);
     }
 
+    /**
+     * Api to create user
+     * @param userDto
+     * @return
+     */
     @PostMapping("/")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserDto userDto) {
         //check user that with username or email already exists then return user already exists
@@ -63,12 +72,21 @@ public class UserController {
 
     }
 
+    /**
+     * Api to fetch all users
+     * @return
+     */
     @GetMapping("/")
     public ResponseEntity<?> getAllUsers() {
         List<UserDto> users = this.userService.getAllUsers();
         return new ResponseEntity<>(new ApiResponseEntity<>(users, true, "Users fetched", null, 200), HttpStatus.OK);
     }
 
+    /**
+     * Api to fetch user by id
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable long id) {
         try {
@@ -83,6 +101,12 @@ public class UserController {
         }
     }
 
+    /**
+     * Api to update user
+     * @param userDto
+     * @param id
+     * @return
+     */
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable Long id) {
         try {
@@ -101,7 +125,11 @@ public class UserController {
         }
     }
 
-    // ONLY ADMIN CAN DELETE USER -> {}
+    /**
+     * Api to delete user, only admin access applicable
+     * @param id
+     * @return
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable long id) {

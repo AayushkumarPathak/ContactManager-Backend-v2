@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.amz.scm.exceptions.ApiException;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +28,7 @@ import com.amz.scm.services.ImageUploader;
 
 
 @Service
+@Slf4j
 public class ContactServiceImpl implements ContactService {
 
     @Autowired
@@ -42,23 +44,21 @@ public class ContactServiceImpl implements ContactService {
     private ImageUploader s3Service;
 
     @Override
-    public ContactDto createContact(ContactDto contactDto, Long user_id,MultipartFile imageFile) {
+    public ContactDto createContact(ContactDto contactDto, Long user_id, MultipartFile imageFile) {
 
-        User user = this.userRepo.findById(user_id).orElseThrow(()-> new ResourceNotFoundException("user", "user_id", String.valueOf(user_id)));
+        User user = this.userRepo.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("user", "user_id", String.valueOf(user_id)));
 
         Contact currContact = this.modelMapper.map(contactDto, Contact.class);
 
-        
 
         // currContact.setPicture("default.png");
         currContact.setCreatedAt(new Date());
         currContact.setUser(user);
 
-        if(imageFile!=null && !imageFile.isEmpty()){
+        if (imageFile != null && !imageFile.isEmpty()) {
             String s3Url = s3Service.uploadImage(imageFile);
             currContact.setPicture(s3Url);
-        }
-        else{
+        } else {
             String deafultUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL0ZPaTrhUTirOwz7dEn4sxkCE-wZQsZljqg&s";
 
             currContact.setPicture(deafultUrl);
@@ -74,48 +74,51 @@ public class ContactServiceImpl implements ContactService {
 
         return this.modelMapper.map(savedContact, ContactDto.class);
 
-        
+
     }
 
     @Override
     public ContactDto getContactById(Long contactId) {
 
         Contact contact = this.contactRepo.findById(contactId)
-        .orElseThrow(()-> 
-            new ResourceNotFoundException("Contact", "contactId",
-            String.valueOf(contactId)
-        ));  
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Contact", "contactId",
+                                String.valueOf(contactId)
+                        ));
 
         return this.modelMapper.map(contact, ContactDto.class);
-        
+
     }
 
     @Override
     public ContactDto updateContact(Long contactId, ContactDto contactDto) {
 
         Contact oldContact = this.contactRepo.findById(contactId)
-        .orElseThrow(()-> 
-            new ResourceNotFoundException("Contact", "contactId",
-            String.valueOf(contactId)
-        )); 
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Contact", "contactId",
+                                String.valueOf(contactId)
+                        ));
+        try {
+            oldContact.setFullName(contactDto.getFullName());
+            oldContact.setEmail(contactDto.getEmail());
+            oldContact.setPhoneNumber(contactDto.getPhoneNumber());
+            oldContact.setAddress(contactDto.getAddress());
+            oldContact.setDescription(contactDto.getDescription());
+            oldContact.setPicture(contactDto.getPicture());
+            oldContact.setFavorite(contactDto.isFavorite());
+            oldContact.setWebsiteLink(contactDto.getWebsiteLink());
+            oldContact.setLinkedInLink(contactDto.getLinkedInLink());
 
-        oldContact.setFullName(contactDto.getFullName());
-        oldContact.setEmail(contactDto.getEmail());
-        oldContact.setPhoneNumber(contactDto.getPhoneNumber());
-        oldContact.setAddress(contactDto.getAddress());
-        oldContact.setDescription(contactDto.getDescription());
-        oldContact.setPicture(contactDto.getPicture());
-        oldContact.setFavorite(contactDto.isFavorite());
-        oldContact.setWebsiteLink(contactDto.getWebsiteLink());
-        oldContact.setLinkedInLink(contactDto.getLinkedInLink());
-        oldContact.setCloudinaryPublicId(contactDto.getCloudinaryPublicId());
-        oldContact.setLinks(contactDto.getLinks());
+            oldContact.setLinks(contactDto.getLinks());
 
-
-        // Dont forget to save the updated contact to the database
-        // and return the updated contact as a ContactDto object
-        Contact updatedContact = this.contactRepo.save(oldContact);
-        return this.modelMapper.map(updatedContact, ContactDto.class);
+            // Don't forget to save the updated contact to the database
+            // and return the updated contact as a ContactDto object
+            Contact updatedContact = this.contactRepo.save(oldContact);
+            return this.modelMapper.map(updatedContact, ContactDto.class);
+        } catch (Exception e) {
+            log.error("Exception occurred while updating contact: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
     @Override
@@ -124,9 +127,9 @@ public class ContactServiceImpl implements ContactService {
             this.contactRepo.deleteById(contactId);
         } catch (Exception e) {
             throw new ApiException(
-                String.format("Unable to delete the contact with %s \n 'Error: ' %s", 
-                    contactId,e.getMessage()
-                )
+                    String.format("Unable to delete the contact with %s \n 'Error: ' %s",
+                            contactId, e.getMessage()
+                    )
             );
         }
     }
@@ -148,18 +151,17 @@ public class ContactServiceImpl implements ContactService {
     public ContactResponse getAllContactsByUser(Long uid, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
 
         Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        
-        Pageable pageable = PageRequest.of(pageNumber, pageSize,sort);
 
-        User userIsExists = this.userRepo.findById(uid).orElseThrow(()-> new ResourceNotFoundException("User not found with  ", "user id", String.valueOf(uid)));
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+
+        User userIsExists = this.userRepo.findById(uid).orElseThrow(() -> new ResourceNotFoundException("User not found with  ", "user id", String.valueOf(uid)));
 
 
-        
         Page<Contact> pageContacts = this.contactRepo.findByUserId(uid, pageable);
-        
+
         List<Contact> allContacts = pageContacts.getContent();
 
-        List<ContactDto> collectedContacts = allContacts.stream().map((contact)->{
+        List<ContactDto> collectedContacts = allContacts.stream().map((contact) -> {
             ContactDto contactDto = this.modelMapper.map(contact, ContactDto.class);
             return contactDto;
         }).collect(Collectors.toList());
@@ -179,9 +181,18 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public boolean checkContactExistsWithFullname(String fullname, long user_id) {
-       boolean isExistByFullname = this.contactRepo.findByFullNameAndUser_Id(fullname,user_id).isPresent();
+        boolean isExistByFullname = this.contactRepo.findByFullNameAndUser_Id(fullname, user_id).isPresent();
 
-       return isExistByFullname;
+        return isExistByFullname;
     }
-    
+
+    // public ContactResponse getFavoriteContactsByUserId(Long uid, Integer pageNumber, Integer pageSize, String sortBy, String sortDir){
+    //     Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+    //     Pageable pageable = PageRequest.of(pageNumber, pageSize,sort);
+
+    //     FavoriteBasedContactSearcher fbcs = new FavoriteBasedContactSearcher(uid);
+
+    //     return fbcs.search();
+    // }
 }

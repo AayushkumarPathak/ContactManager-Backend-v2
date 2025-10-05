@@ -2,7 +2,7 @@ package com.amz.scm;
 
 import java.util.List;
 
-
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -16,7 +16,8 @@ import com.amz.scm.models.Role;
 import com.amz.scm.repositories.RoleRepo;
 
 @SpringBootApplication
-public class Scm2apiApplication implements CommandLineRunner {
+@Slf4j
+public class SmartContactManagerV2Service implements CommandLineRunner {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -26,7 +27,7 @@ public class Scm2apiApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
 
-        SpringApplication.run(Scm2apiApplication.class, args);
+        SpringApplication.run(SmartContactManagerV2Service.class, args);
     }
 
     @Bean
@@ -44,7 +45,7 @@ public class Scm2apiApplication implements CommandLineRunner {
         try {
 
             boolean isAdminRoleAlreadyExists = this.roleRepo.findById(AppConstants.ADMIN_USER).isPresent();
-             boolean isUserRoleAlreadyExists = this.roleRepo.findById(AppConstants.NORMAL_USER).isPresent();
+            boolean isUserRoleAlreadyExists = this.roleRepo.findById(AppConstants.NORMAL_USER).isPresent();
 
             if(!isAdminRoleAlreadyExists && !isUserRoleAlreadyExists){
                 Role roleAdmin = new Role();
@@ -70,11 +71,8 @@ public class Scm2apiApplication implements CommandLineRunner {
 
 
         } catch (Exception e) {
-            
+           log.error("Error Starting Service: {}", e.getMessage(), e);
         }
     }
-
     
-
-
 }

@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.validator.constraints.Length;
 
 import com.amz.scm.models.SocialLink;
 import jakarta.validation.constraints.Email;
@@ -46,7 +45,6 @@ public class ContactDto {
     private String websiteLink;
     private String linkedInLink;
 
-    private String cloudinaryPublicId;
 
     private Date createdAt;
 

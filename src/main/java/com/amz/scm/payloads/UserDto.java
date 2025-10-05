@@ -1,20 +1,18 @@
 package com.amz.scm.payloads;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.amz.scm.models.Providers;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import com.amz.scm.models.Providers;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Getter
 @Setter
