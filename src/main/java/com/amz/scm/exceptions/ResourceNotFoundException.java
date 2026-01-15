@@ -1,4 +1,4 @@
-package com.amz.scm.exceptions;
+package com.techmagnet.scm.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException{
     private String resourceName;

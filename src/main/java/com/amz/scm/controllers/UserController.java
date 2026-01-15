@@ -1,4 +1,4 @@
-package com.amz.scm.controllers;
+package com.techmagnet.scm.controllers;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.amz.scm.apiResponses.ApiResponseEntity;
-import com.amz.scm.payloads.UserDto;
-import com.amz.scm.services.UserService;
+import com.techmagnet.scm.apiResponses.ApiResponseEntity;
+import com.techmagnet.scm.payloads.UserDto;
+import com.techmagnet.scm.services.UserService;
 
 import jakarta.validation.Valid;
 

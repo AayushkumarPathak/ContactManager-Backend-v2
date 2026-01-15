@@ -1,7 +1,7 @@
-package com.amz.scm.services;
+package com.techmagnet.scm.services;
 
 
-import com.amz.scm.payloads.UserDto;
+import com.techmagnet.scm.payloads.UserDto;
 import java.util.List;
 
 

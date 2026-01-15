@@ -1,8 +1,8 @@
-package com.amz.scm.repositories;
+package com.techmagnet.scm.repositories;
 
-import com.amz.scm.models.Contact;
-import com.amz.scm.payloads.ContactDto;
-import com.amz.scm.payloads.UserDto;
+import com.techmagnet.scm.models.Contact;
+import com.techmagnet.scm.payloads.ContactDto;
+import com.techmagnet.scm.payloads.UserDto;
 
 import java.util.Optional;
 

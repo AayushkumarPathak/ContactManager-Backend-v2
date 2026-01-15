@@ -1,4 +1,4 @@
-package com.amz.scm.controllers;
+package com.techmagnet.scm.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.amz.scm.apiResponses.ApiResponseEntity;
-import com.amz.scm.exceptions.ApiException;
-import com.amz.scm.models.User;
-import com.amz.scm.payloads.JwtAuthRequest;
-import com.amz.scm.payloads.JwtAuthResponse;
-import com.amz.scm.payloads.UserDto;
-import com.amz.scm.security.JwtTokenHelper;
-import com.amz.scm.services.UserService;
+import com.techmagnet.scm.apiResponses.ApiResponseEntity;
+import com.techmagnet.scm.exceptions.ApiException;
+import com.techmagnet.scm.models.User;
+import com.techmagnet.scm.payloads.JwtAuthRequest;
+import com.techmagnet.scm.payloads.JwtAuthResponse;
+import com.techmagnet.scm.payloads.UserDto;
+import com.techmagnet.scm.security.JwtTokenHelper;
+import com.techmagnet.scm.services.UserService;
 
 @RestController
 @RequestMapping("/api/v2/auth")

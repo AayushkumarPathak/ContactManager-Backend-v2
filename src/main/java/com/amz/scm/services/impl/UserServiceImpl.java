@@ -1,4 +1,4 @@
-package com.amz.scm.services.impl;
+package com.techmagnet.scm.services.impl;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -11,15 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.amz.scm.exceptions.ResourceNotFoundException;
-import com.amz.scm.helpers.AppConstants;
-import com.amz.scm.models.Providers;
-import com.amz.scm.models.Role;
-import com.amz.scm.models.User;
-import com.amz.scm.payloads.UserDto;
-import com.amz.scm.repositories.RoleRepo;
-import com.amz.scm.repositories.UserRepo;
-import com.amz.scm.services.UserService;
+import com.techmagnet.scm.exceptions.ResourceNotFoundException;
+import com.techmagnet.scm.helpers.AppConstants;
+import com.techmagnet.scm.models.Providers;
+import com.techmagnet.scm.models.Role;
+import com.techmagnet.scm.models.User;
+import com.techmagnet.scm.payloads.UserDto;
+import com.techmagnet.scm.repositories.RoleRepo;
+import com.techmagnet.scm.repositories.UserRepo;
+import com.techmagnet.scm.services.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {

@@ -1,4 +1,4 @@
-package com.amz.scm.exceptions;
+package com.techmagnet.scm.exceptions;
 
 public class ImageUploadException extends RuntimeException {
 

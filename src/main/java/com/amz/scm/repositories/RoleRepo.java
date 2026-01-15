@@ -1,8 +1,8 @@
-package com.amz.scm.repositories;
+package com.techmagnet.scm.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.amz.scm.models.Role;
+import com.techmagnet.scm.models.Role;
 
 public interface RoleRepo  extends JpaRepository<Role,Integer>{
     

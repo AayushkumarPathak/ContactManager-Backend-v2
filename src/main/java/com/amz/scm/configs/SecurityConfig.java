@@ -1,4 +1,4 @@
-package com.amz.scm.configs;
+package com.techmagnet.scm.configs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -19,9 +19,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import com.amz.scm.security.CustomUserDetailService;
-import com.amz.scm.security.JwtAuthenticationEntryPoint;
-import com.amz.scm.security.JwtAuthenticationFilter;
+import com.techmagnet.scm.security.CustomUserDetailService;
+import com.techmagnet.scm.security.JwtAuthenticationEntryPoint;
+import com.techmagnet.scm.security.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity

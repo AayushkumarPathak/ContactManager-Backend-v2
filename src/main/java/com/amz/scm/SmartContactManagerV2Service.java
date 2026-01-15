@@ -1,4 +1,4 @@
-package com.amz.scm;
+package com.techmagnet.scm;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.amz.scm.helpers.AppConstants;
-import com.amz.scm.models.Role;
-import com.amz.scm.repositories.RoleRepo;
+import com.techmagnet.scm.helpers.AppConstants;
+import com.techmagnet.scm.models.Role;
+import com.techmagnet.scm.repositories.RoleRepo;
 
 @SpringBootApplication
 @Slf4j

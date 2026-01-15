@@ -1,4 +1,4 @@
-package com.amz.scm.controllers;
+package com.techmagnet.scm.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,14 +9,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.amz.scm.apiResponses.ApiResponseEntity;
-import com.amz.scm.exceptions.ApiException;
-import com.amz.scm.helpers.AppConstants;
-import com.amz.scm.models.User;
-import com.amz.scm.payloads.ContactDto;
-import com.amz.scm.payloads.ContactResponse;
-import com.amz.scm.services.ContactService;
-import com.amz.scm.services.ImageUploader;
+import com.techmagnet.scm.apiResponses.ApiResponseEntity;
+import com.techmagnet.scm.exceptions.ApiException;
+import com.techmagnet.scm.helpers.AppConstants;
+import com.techmagnet.scm.models.User;
+import com.techmagnet.scm.payloads.ContactDto;
+import com.techmagnet.scm.payloads.ContactResponse;
+import com.techmagnet.scm.services.ContactService;
+import com.techmagnet.scm.services.ImageUploader;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -30,7 +30,9 @@ public class ContactController {
     private ContactService contactService;
 
     @Autowired
-    private ImageUploader s3ServiceClient;
+    private ImageUploader imageUploader;
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Value("${project.image}")
     private String path;
@@ -79,7 +81,7 @@ public class ContactController {
         validateUserAccess(userid);
 
 
-        ObjectMapper objectMapper = new ObjectMapper();
+//        ObjectMapper objectMapper = new ObjectMapper();
         ContactDto contactDto;
         try {
 
@@ -101,6 +103,7 @@ public class ContactController {
                     new ApiResponseEntity<>(savedContact, true, "Contact created successfully", null, 200),
                     HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(
                     new ApiResponseEntity<>(null, false, "Unable to save contact",
                             e.getMessage(), 400), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -181,9 +184,9 @@ public class ContactController {
 
         try {
             String pictureUrl = contact.getPicture();
-            if (pictureUrl != null && pictureUrl.startsWith("https://")) {
+            if (pictureUrl != null && pictureUrl.contains("/storage/v1/object/")) {
                 String fileName = pictureUrl.substring(pictureUrl.lastIndexOf("/") + 1);
-                s3ServiceClient.deleteImage(fileName);
+                imageUploader.deleteImage(fileName);
             }
             this.contactService.deleteContact(contactId);
             ApiResponseEntity<?> response = new ApiResponseEntity<>(
@@ -222,6 +225,3 @@ public class ContactController {
     }
 
 }
-
-
-

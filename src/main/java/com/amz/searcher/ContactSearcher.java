@@ -1,8 +1,6 @@
-package com.amz.searcher;
+package com.techmagnet.searcher;
 
-import java.util.List;
-
-import com.amz.scm.payloads.ContactResponse;
+import com.techmagnet.scm.payloads.ContactResponse;
 
 public interface ContactSearcher {
 

@@ -1,10 +1,10 @@
-package com.amz.scm.services.impl;
+package com.techmagnet.scm.services.impl;
 
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.amz.scm.exceptions.ApiException;
+import com.techmagnet.scm.exceptions.ApiException;
 
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -15,16 +15,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.domain.Page;
-import com.amz.scm.exceptions.ResourceNotFoundException;
-import com.amz.scm.models.Contact;
-import com.amz.scm.models.SocialLink;
-import com.amz.scm.models.User;
-import com.amz.scm.payloads.ContactDto;
-import com.amz.scm.payloads.ContactResponse;
-import com.amz.scm.repositories.ContactRepo;
-import com.amz.scm.repositories.UserRepo;
-import com.amz.scm.services.ContactService;
-import com.amz.scm.services.ImageUploader;
+import com.techmagnet.scm.exceptions.ResourceNotFoundException;
+import com.techmagnet.scm.models.Contact;
+import com.techmagnet.scm.models.SocialLink;
+import com.techmagnet.scm.models.User;
+import com.techmagnet.scm.payloads.ContactDto;
+import com.techmagnet.scm.payloads.ContactResponse;
+import com.techmagnet.scm.repositories.ContactRepo;
+import com.techmagnet.scm.repositories.UserRepo;
+import com.techmagnet.scm.services.ContactService;
+import com.techmagnet.scm.services.ImageUploader;
 
 
 @Service
@@ -41,7 +41,7 @@ public class ContactServiceImpl implements ContactService {
     private UserRepo userRepo;
 
     @Autowired
-    private ImageUploader s3Service;
+    private ImageUploader imageUploader;
 
     @Override
     public ContactDto createContact(ContactDto contactDto, Long user_id, MultipartFile imageFile) {
@@ -56,12 +56,12 @@ public class ContactServiceImpl implements ContactService {
         currContact.setUser(user);
 
         if (imageFile != null && !imageFile.isEmpty()) {
-            String s3Url = s3Service.uploadImage(imageFile);
-            currContact.setPicture(s3Url);
+            String supabaseImageUrl = imageUploader.uploadImage(imageFile);
+            currContact.setPicture(supabaseImageUrl);
         } else {
-            String deafultUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL0ZPaTrhUTirOwz7dEn4sxkCE-wZQsZljqg&s";
+            String defaultUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL0ZPaTrhUTirOwz7dEn4sxkCE-wZQsZljqg&s";
 
-            currContact.setPicture(deafultUrl);
+            currContact.setPicture(defaultUrl);
         }
 
 

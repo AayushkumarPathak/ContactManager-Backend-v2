@@ -1,4 +1,4 @@
-package com.amz.scm.security;
+package com.techmagnet.scm.security;
 
 import java.io.IOException;
 import java.util.Arrays;

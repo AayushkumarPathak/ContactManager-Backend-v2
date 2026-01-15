@@ -1,4 +1,4 @@
-package com.amz.scm.security;
+package com.techmagnet.scm.security;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import com.amz.scm.models.User;
+import com.techmagnet.scm.models.User;
 
 @Component
 public class JwtTokenHelper {

@@ -1,4 +1,4 @@
-package com.amz.scm.models;
+package com.techmagnet.scm.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;

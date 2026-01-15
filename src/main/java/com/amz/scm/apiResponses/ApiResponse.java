@@ -1,4 +1,4 @@
-package com.amz.scm.apiResponses;
+package com.techmagnet.scm.apiResponses;
 
 public interface ApiResponse<T> {
     T getData();

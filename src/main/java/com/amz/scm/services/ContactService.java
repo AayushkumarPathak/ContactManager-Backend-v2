@@ -1,17 +1,17 @@
-package com.amz.scm.services;
+package com.techmagnet.scm.services;
 
 
 
-import java.util.List;
+import java.io.IOException;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.amz.scm.payloads.ContactDto;
-import com.amz.scm.payloads.ContactResponse;
+import com.techmagnet.scm.payloads.ContactDto;
+import com.techmagnet.scm.payloads.ContactResponse;
 
 public interface ContactService {
 
-    ContactDto createContact(ContactDto contactDto,Long user_id, MultipartFile imageFile);
+    ContactDto createContact(ContactDto contactDto,Long user_id, MultipartFile imageFile) throws IOException;
 
     ContactDto getContactById(Long contactId);
 

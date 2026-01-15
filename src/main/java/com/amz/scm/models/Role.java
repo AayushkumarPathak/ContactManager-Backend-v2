@@ -1,4 +1,4 @@
-package com.amz.scm.models;
+package com.techmagnet.scm.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

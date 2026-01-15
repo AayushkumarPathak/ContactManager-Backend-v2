@@ -1,4 +1,4 @@
-package com.amz.scm.apiResponses;
+package com.techmagnet.scm.apiResponses;
 
 import lombok.Getter;
 import lombok.Setter;

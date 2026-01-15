@@ -1,10 +1,10 @@
-package com.amz.scm.payloads;
+package com.techmagnet.scm.payloads;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.amz.scm.models.Providers;
+import com.techmagnet.scm.models.Providers;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.Email;

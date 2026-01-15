@@ -1,4 +1,4 @@
-package com.amz.scm.payloads;
+package com.techmagnet.scm.payloads;
 
 import java.util.List;
 

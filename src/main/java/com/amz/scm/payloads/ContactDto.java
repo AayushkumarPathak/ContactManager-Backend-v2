@@ -1,11 +1,11 @@
-package com.amz.scm.payloads;
+package com.techmagnet.scm.payloads;
 
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 
-import com.amz.scm.models.SocialLink;
+import com.techmagnet.scm.models.SocialLink;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
