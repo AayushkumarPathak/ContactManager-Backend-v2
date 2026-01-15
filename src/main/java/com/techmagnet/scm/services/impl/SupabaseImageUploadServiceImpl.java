@@ -36,7 +36,7 @@ public class SupabaseImageUploadServiceImpl implements ImageUploader {
 
 
     @Override
-    public String uploadImage(MultipartFile imageFile) throws IOException {
+    public String uploadImage(MultipartFile imageFile){
         try {
             String originalName = imageFile.getOriginalFilename().toLowerCase();
             String extension = originalName.substring(originalName.lastIndexOf("."));
