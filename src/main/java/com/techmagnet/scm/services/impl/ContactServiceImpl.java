@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.techmagnet.scm.exceptions.ApiException;
 
+import com.techmagnet.scm.helpers.AppConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,9 +60,7 @@ public class ContactServiceImpl implements ContactService {
             String supabaseImageUrl = imageUploader.uploadImage(imageFile);
             currContact.setPicture(supabaseImageUrl);
         } else {
-            String defaultUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL0ZPaTrhUTirOwz7dEn4sxkCE-wZQsZljqg&s";
-
-            currContact.setPicture(defaultUrl);
+            currContact.setPicture(AppConstants.DEFAULT_CONTACT_DP_URL);
         }
 
 

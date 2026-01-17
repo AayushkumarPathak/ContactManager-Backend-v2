@@ -1,8 +1,8 @@
 package com.techmagnet.scm.services;
 
 
-
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,7 +11,7 @@ import com.techmagnet.scm.payloads.ContactResponse;
 
 public interface ContactService {
 
-    ContactDto createContact(ContactDto contactDto,Long user_id, MultipartFile imageFile) throws IOException;
+    ContactDto createContact(ContactDto contactDto, Long user_id, MultipartFile imageFile) throws IOException;
 
     ContactDto getContactById(Long contactId);
 
@@ -19,7 +19,7 @@ public interface ContactService {
 
     void deleteContact(Long contactId);
 
-    ContactDto getContactByEmail(Long uid ,String email);
+    ContactDto getContactByEmail(Long uid, String email);
 
     boolean checkContactExistsWithFullname(String fullname, long user_id);
 
