@@ -25,8 +25,11 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/v2/user")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * Api to test infra setup

@@ -14,8 +14,11 @@ import com.techmagnet.scm.repositories.UserRepo;
 public class CustomUserDetailService implements UserDetailsService {
 
 
-    @Autowired
-    private  UserRepo userRepo;
+    private final UserRepo userRepo;
+
+    public CustomUserDetailService(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
 
     @Override                             // username is email in this case
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

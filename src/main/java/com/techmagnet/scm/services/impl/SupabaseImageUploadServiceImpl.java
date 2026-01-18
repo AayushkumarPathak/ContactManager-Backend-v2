@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 @Slf4j
 public class SupabaseImageUploadServiceImpl implements ImageUploader {
 
-    @Autowired
     private RestTemplate restTemplate;
 
     @Value("${supabase.url}")
@@ -33,6 +32,10 @@ public class SupabaseImageUploadServiceImpl implements ImageUploader {
 
     @Value("${supabase.bucket}")
     private String bucketName;
+
+    public SupabaseImageUploadServiceImpl(RestTemplate restTemplate){
+        this.restTemplate = restTemplate;
+    }
 
 
     @Override

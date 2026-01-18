@@ -58,12 +58,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+    private final UserDetailsService userDetailsService;
+    private final JwtTokenHelper jwtTokenHelper;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private JwtTokenHelper jwtTokenHelper;
+    public JwtAuthenticationFilter(UserDetailsService userDetailsService, JwtTokenHelper jwtTokenHelper) {
+        this.userDetailsService = userDetailsService;
+        this.jwtTokenHelper = jwtTokenHelper;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

@@ -27,55 +27,53 @@ import com.techmagnet.scm.security.JwtAuthenticationFilter;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailService customUserDetailService;
+    private final CustomUserDetailService customUserDetailService;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    public SecurityConfig(CustomUserDetailService customUserDetailService,
+                          JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+                          JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.customUserDetailService = customUserDetailService;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
 
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    public static final String[] PUBLIC_URLS = { 
-           "/api/v2/auth/**",
+    public static final String[] PUBLIC_URLS = {
+            "/api/v2/auth/**",
             "/v3/api-docs",
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/swagger-resources/**",
-            "/webjars/**",  
+            "/webjars/**",
             "/api-docs/**",
             "/v3/api-docs/swagger-config",
-           
-           
-            
-            
-            
+
     };
 
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         return http
-        .csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(PUBLIC_URLS).permitAll()
-            .anyRequest().authenticated()
-        )
-        .authenticationProvider(daoAuthenticationProvider())
-        .exceptionHandling(
-            ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint)
-        )
-        .sessionManagement(
-            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        )
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)  
-        .build();
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(PUBLIC_URLS).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .authenticationProvider(daoAuthenticationProvider())
+                .exceptionHandling(
+                        ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                )
+                .sessionManagement(
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(this.customUserDetailService);
         provider.setPasswordEncoder(passwordEncoder());
@@ -84,7 +82,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
@@ -94,13 +92,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
-    public FilterRegistrationBean<?> corsBean(){
+    public FilterRegistrationBean<?> corsBean() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-         CorsConfiguration corsConfiguration = new CorsConfiguration();
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.addAllowedOriginPattern("*");
         corsConfiguration.addAllowedHeader("AUTHORIZATION");
@@ -116,7 +115,7 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", corsConfiguration);
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
         bean.setOrder(-110);
-        // return new FilterRegistrationBean<>(new CorsFilter(source));
+
         return bean;
     }
 

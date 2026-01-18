@@ -6,10 +6,9 @@ import java.util.stream.Collectors;
 
 import com.techmagnet.scm.exceptions.ApiException;
 
-import com.techmagnet.scm.helpers.AppConstants;
+import com.techmagnet.scm.utils.AppConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -32,17 +31,20 @@ import com.techmagnet.scm.services.ImageUploader;
 @Slf4j
 public class ContactServiceImpl implements ContactService {
 
-    @Autowired
-    private ContactRepo contactRepo;
+    private final ContactRepo contactRepo;
+    private final ModelMapper modelMapper;
+    private final UserRepo userRepo;
+    private final ImageUploader imageUploader;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private UserRepo userRepo;
-
-    @Autowired
-    private ImageUploader imageUploader;
+    public ContactServiceImpl(ContactRepo contactRepo,
+                             ModelMapper modelMapper,
+                             UserRepo userRepo,
+                             ImageUploader imageUploader) {
+        this.contactRepo = contactRepo;
+        this.modelMapper = modelMapper;
+        this.userRepo = userRepo;
+        this.imageUploader = imageUploader;
+    }
 
     @Override
     public ContactDto createContact(ContactDto contactDto, Long user_id, MultipartFile imageFile) {

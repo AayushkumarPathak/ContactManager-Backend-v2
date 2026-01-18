@@ -27,20 +27,23 @@ import com.techmagnet.scm.services.UserService;
 @RequestMapping("/api/v2/auth")
 public class AuthController {
 
-    @Autowired
-    private JwtTokenHelper jwtTokenHelper;
+    private final JwtTokenHelper jwtTokenHelper;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
+    private final ModelMapper modelMapper;
+    private final UserService userService;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private UserService userService;
+    public AuthController(JwtTokenHelper jwtTokenHelper,
+                         AuthenticationManager authenticationManager,
+                         UserDetailsService userDetailsService,
+                         ModelMapper modelMapper,
+                         UserService userService) {
+        this.jwtTokenHelper = jwtTokenHelper;
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+        this.modelMapper = modelMapper;
+        this.userService = userService;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponseEntity<?>> registerUser(@RequestBody UserDto userDto) {

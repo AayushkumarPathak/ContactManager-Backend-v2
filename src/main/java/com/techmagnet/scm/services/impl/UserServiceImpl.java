@@ -7,12 +7,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.techmagnet.scm.exceptions.ResourceNotFoundException;
-import com.techmagnet.scm.helpers.AppConstants;
+import com.techmagnet.scm.utils.AppConstants;
 import com.techmagnet.scm.models.Providers;
 import com.techmagnet.scm.models.Role;
 import com.techmagnet.scm.models.User;
@@ -24,17 +23,20 @@ import com.techmagnet.scm.services.UserService;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepo userRepo;
+    private final UserRepo userRepo;
+    private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepo roleRepo;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private RoleRepo roleRepo;
+    public UserServiceImpl(UserRepo userRepo,
+                          ModelMapper modelMapper,
+                          PasswordEncoder passwordEncoder,
+                          RoleRepo roleRepo) {
+        this.userRepo = userRepo;
+        this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepo = roleRepo;
+    }
 
     @Override
     public UserDto saveUser(UserDto user) {

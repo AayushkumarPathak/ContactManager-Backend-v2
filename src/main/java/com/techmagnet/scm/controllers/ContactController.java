@@ -1,6 +1,5 @@
 package com.techmagnet.scm.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.techmagnet.scm.apiResponses.ApiResponseEntity;
 import com.techmagnet.scm.exceptions.ApiException;
-import com.techmagnet.scm.helpers.AppConstants;
+import com.techmagnet.scm.utils.AppConstants;
 import com.techmagnet.scm.models.User;
 import com.techmagnet.scm.payloads.ContactDto;
 import com.techmagnet.scm.payloads.ContactResponse;
@@ -26,11 +25,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping("/api/v2/contact")
 public class ContactController {
 
-    @Autowired
-    private ContactService contactService;
+    private final ContactService contactService;
+    private final ImageUploader imageUploader;
 
-    @Autowired
-    private ImageUploader imageUploader;
+    public ContactController(ContactService contactService, ImageUploader imageUploader) {
+        this.contactService = contactService;
+        this.imageUploader = imageUploader;
+    }
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 

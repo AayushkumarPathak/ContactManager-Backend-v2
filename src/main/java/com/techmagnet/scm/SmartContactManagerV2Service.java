@@ -4,14 +4,13 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.techmagnet.scm.helpers.AppConstants;
+import com.techmagnet.scm.utils.AppConstants;
 import com.techmagnet.scm.models.Role;
 import com.techmagnet.scm.repositories.RoleRepo;
 
@@ -19,11 +18,13 @@ import com.techmagnet.scm.repositories.RoleRepo;
 @Slf4j
 public class SmartContactManagerV2Service implements CommandLineRunner {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepo roleRepo;
 
-    @Autowired
-    private RoleRepo roleRepo;
+    public SmartContactManagerV2Service(PasswordEncoder passwordEncoder, RoleRepo roleRepo) {
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepo = roleRepo;
+    }
 
     public static void main(String[] args) {
 
