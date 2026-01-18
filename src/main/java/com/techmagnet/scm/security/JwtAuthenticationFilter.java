@@ -28,29 +28,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final List<String> WHITELISTED_PATHS = Arrays.asList(
             "/api/v2/auth",
-                "/v3/api-docs",
-                "/v3/api-docs/swagger-config",
-                "/swagger-ui",
-                "/swagger-ui/",
-                "/swagger-ui.html",
-                "/swagger-resources",
-                "/swagger-resources/",
-                "/webjars",
-                "/webjars/"
+            "/v3/api-docs",
+            "/v3/api-docs/swagger-config",
+            "/swagger-ui",
+            "/swagger-ui/",
+            "/swagger-ui.html",
+            "/swagger-resources",
+            "/swagger-resources/",
+            "/webjars",
+            "/webjars/"
     );
 
-    
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-         String path = request.getRequestURI();
+        String path = request.getRequestURI();
 
         return path.startsWith("/v3/api-docs") ||
-           path.startsWith("/swagger-ui") ||
-           path.startsWith("/swagger-resources") ||
-           path.startsWith("/webjars") ||
-           path.startsWith("/api-docs") || 
-           path.startsWith("/api/v2/auth");
+                path.startsWith("/swagger-ui") ||
+                path.startsWith("/swagger-resources") ||
+                path.startsWith("/webjars") ||
+                path.startsWith("/api-docs") ||
+                path.startsWith("/api/v2/auth");
     }
 
     private boolean isWhitelisted(String path) {
@@ -68,19 +67,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain)
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
             throws ServletException, IOException {
-
-        // String path = request.getRequestURI();
-        // System.out.println("Request URI: " + path);
-
-        // if (isWhitelisted(path)) {
-        //     filterChain.doFilter(request, response);
-        //     return;
-        // }
-
-        // 1. get token
 
         String requestToken = request.getHeader("Authorization");
         Enumeration<String> headerNames = request.getHeaderNames();
@@ -88,9 +77,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         while (headerNames.hasMoreElements()) {
             System.out.println(headerNames.nextElement());
         }
-        // Bearer 2352523sdgsg
-
-        System.out.println("Jwt Auth filter:  Req Token: " + requestToken);
 
         String username = null;
 
@@ -123,9 +109,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
             if (this.jwtTokenHelper.validateToken(token, userDetails)) {
-                // shi chal rha hai
-                // authentication karna hai
-
+                System.out.println("Valid token");
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken

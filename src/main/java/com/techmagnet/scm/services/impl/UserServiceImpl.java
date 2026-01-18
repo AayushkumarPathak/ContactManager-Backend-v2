@@ -29,9 +29,9 @@ public class UserServiceImpl implements UserService {
     private final RoleRepo roleRepo;
 
     public UserServiceImpl(UserRepo userRepo,
-                          ModelMapper modelMapper,
-                          PasswordEncoder passwordEncoder,
-                          RoleRepo roleRepo) {
+                           ModelMapper modelMapper,
+                           PasswordEncoder passwordEncoder,
+                           RoleRepo roleRepo) {
         this.userRepo = userRepo;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
@@ -46,22 +46,18 @@ public class UserServiceImpl implements UserService {
         currUser.setPassword(user.getPassword());
         currUser.setProvider(Providers.SELF);
         currUser.setCreatedAt(new Date());
-        
-        if(currUser.getUsername().startsWith("scm#admin")){
+
+        if (currUser.getUsername().startsWith("scm#admin")) {
 
             Set<Role> myrole = new HashSet<>();
             myrole.add(new Role(201, "ROLE_ADMIN"));
 
             currUser.setRoles(myrole);
-        }
-        else{
+        } else {
             Set<Role> myrole = new HashSet<>();
             myrole.add(new Role(202, "NORMAL_USER"));
             currUser.setRoles(myrole);
         }
-
-
-        
 
         User savedUser = this.userRepo.save(currUser);
 
@@ -76,11 +72,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUser(UserDto user,Long userId) {
+    public UserDto updateUser(UserDto user, Long userId) {
         User user1 = this.userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", String.valueOf(userId)));
 
-        UserDto oldUser = this.modelMapper.map(user1,UserDto.class);
+        UserDto oldUser = this.modelMapper.map(user1, UserDto.class);
         oldUser.setFullName(user.getFullName());
         oldUser.setEmail(user.getEmail());
         oldUser.setPhoneNumber(user.getPhoneNumber());
@@ -91,7 +87,7 @@ public class UserServiceImpl implements UserService {
         oldUser.setPassword(user.getPassword());
 
         User updatedUser = this.modelMapper.map(oldUser, User.class);
-        
+
         //user is now updated save to db
         updatedUser = this.userRepo.save(updatedUser);
 
@@ -100,12 +96,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(long id) {
-       try{
-           this.userRepo.deleteById(id);
-       }
-       catch (Exception e){
-           throw new ResourceNotFoundException("Unable to delete User not found with: ", "id", String.valueOf(id));
-       }
+        try {
+            this.userRepo.deleteById(id);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Unable to delete User not found with: ", "id", String.valueOf(id));
+        }
     }
 
     @Override
@@ -119,7 +114,6 @@ public class UserServiceImpl implements UserService {
                 new ResourceNotFoundException("User", "email", email));
 
         return user != null;
-
     }
 
     @Override
@@ -140,7 +134,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto registerUser(UserDto userDto) {
-       
+
         User user = this.modelMapper.map(userDto, User.class);
 
         //handle password encryption
@@ -149,10 +143,10 @@ public class UserServiceImpl implements UserService {
         user.setCreatedAt(new Date());
         user.setProvider(Providers.SELF);
         user.setEnabled(true);
-        
+
         //handle role
         Role role = this.roleRepo.findById(AppConstants.NORMAL_USER).get();
-        
+
         user.getRoles().add(role);
 
 
@@ -164,9 +158,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean checkUserAlreadyExists(String username, String email) {
-        boolean emailExists  = this.userRepo.findByEmail(email).isPresent();
-        boolean usernameExists  = this.userRepo.findByUsername(username).isPresent();
+        boolean emailExists = this.userRepo.findByEmail(email).isPresent();
+        boolean usernameExists = this.userRepo.findByUsername(username).isPresent();
 
-        return emailExists  || usernameExists ;
+        return emailExists || usernameExists;
     }
 }

@@ -37,9 +37,9 @@ public class ContactServiceImpl implements ContactService {
     private final ImageUploader imageUploader;
 
     public ContactServiceImpl(ContactRepo contactRepo,
-                             ModelMapper modelMapper,
-                             UserRepo userRepo,
-                             ImageUploader imageUploader) {
+                              ModelMapper modelMapper,
+                              UserRepo userRepo,
+                              ImageUploader imageUploader) {
         this.contactRepo = contactRepo;
         this.modelMapper = modelMapper;
         this.userRepo = userRepo;
@@ -54,7 +54,6 @@ public class ContactServiceImpl implements ContactService {
         Contact currContact = this.modelMapper.map(contactDto, Contact.class);
 
 
-        // currContact.setPicture("default.png");
         currContact.setCreatedAt(new Date());
         currContact.setUser(user);
 
@@ -74,8 +73,6 @@ public class ContactServiceImpl implements ContactService {
         Contact savedContact = this.contactRepo.save(currContact);
 
         return this.modelMapper.map(savedContact, ContactDto.class);
-
-
     }
 
     @Override
@@ -187,13 +184,4 @@ public class ContactServiceImpl implements ContactService {
         return isExistByFullname;
     }
 
-    // public ContactResponse getFavoriteContactsByUserId(Long uid, Integer pageNumber, Integer pageSize, String sortBy, String sortDir){
-    //     Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-
-    //     Pageable pageable = PageRequest.of(pageNumber, pageSize,sort);
-
-    //     FavoriteBasedContactSearcher fbcs = new FavoriteBasedContactSearcher(uid);
-
-    //     return fbcs.search();
-    // }
 }

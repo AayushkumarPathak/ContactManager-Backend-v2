@@ -27,16 +27,13 @@ public class ContactController {
 
     private final ContactService contactService;
     private final ImageUploader imageUploader;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public ContactController(ContactService contactService, ImageUploader imageUploader) {
         this.contactService = contactService;
         this.imageUploader = imageUploader;
     }
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
-    @Value("${project.image}")
-    private String path;
 
     /**
      * Validate users for their access to the operations
@@ -82,7 +79,6 @@ public class ContactController {
         validateUserAccess(userid);
 
 
-//        ObjectMapper objectMapper = new ObjectMapper();
         ContactDto contactDto;
         try {
 
@@ -96,9 +92,7 @@ public class ContactController {
                         HttpStatus.CONFLICT
                 );
             }
-            if (contactDto.getPicture() == null || contactDto.getPicture().isEmpty()) {
-                contactDto.setPicture("https://tinyurl.com/scmDefaultContactImg");
-            }
+
             ContactDto savedContact = this.contactService.createContact(contactDto, userid, imageFile);
             return new ResponseEntity<>(
                     new ApiResponseEntity<>(savedContact, true, "Contact created successfully", null, 200),
@@ -113,7 +107,7 @@ public class ContactController {
 
 
     /**
-     * Contact api to fetch contact by id;
+     * Api to fetch contact by id;
      *
      * @param contactId
      * @return
@@ -206,6 +200,12 @@ public class ContactController {
         }
     }
 
+    /**
+     * Api to update contact details
+     * @param contactId
+     * @param contactDto
+     * @return
+     */
     @PutMapping("/{contactId}")
     public ResponseEntity<ApiResponseEntity<?>> updateContact(@PathVariable Long contactId, @RequestBody ContactDto contactDto) {
 

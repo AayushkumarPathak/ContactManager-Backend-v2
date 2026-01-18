@@ -33,6 +33,7 @@ public class UserController {
 
     /**
      * Api to test infra setup
+     *
      * @return
      */
     @GetMapping("/test")
@@ -42,6 +43,7 @@ public class UserController {
 
     /**
      * Api to create user
+     *
      * @param userDto
      * @return
      */
@@ -51,13 +53,11 @@ public class UserController {
 
         boolean isUserExists = this.userService.checkUserAlreadyExists(userDto.getUsername(), userDto.getEmail());
 
-        if(isUserExists){
-             return new ResponseEntity<>(
-                new ApiResponseEntity<>(null, false, "User with given email or username already exists", null, 409),
-                HttpStatus.CONFLICT);
+        if (isUserExists) {
+            return new ResponseEntity<>(
+                    new ApiResponseEntity<>(null, false, "User with given email or username already exists", null, 409),
+                    HttpStatus.CONFLICT);
         }
-
-
 
         try {
             UserDto savedUser = this.userService.saveUser(userDto);
@@ -77,6 +77,7 @@ public class UserController {
 
     /**
      * Api to fetch all users
+     *
      * @return
      */
     @GetMapping("/")
@@ -87,6 +88,7 @@ public class UserController {
 
     /**
      * Api to fetch user by id
+     *
      * @param id
      * @return
      */
@@ -106,6 +108,7 @@ public class UserController {
 
     /**
      * Api to update user
+     *
      * @param userDto
      * @param id
      * @return
@@ -130,6 +133,7 @@ public class UserController {
 
     /**
      * Api to delete user, only admin access applicable
+     *
      * @param id
      * @return
      */

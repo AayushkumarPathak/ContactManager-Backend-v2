@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 public interface ContactRepo extends JpaRepository<Contact, Long> {
     Page<Contact> findByUser(UserDto user, Pageable pageable);
 
-    // Main method to fetch and show all contacts that user stored 
+    // Method to fetch and show all contacts that user stored
     Page<Contact> findByUserId(Long contact_id, Pageable pageable);
 
     Optional<Contact> findByEmail(String email);
