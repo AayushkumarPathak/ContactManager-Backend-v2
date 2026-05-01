@@ -3,6 +3,7 @@ package com.techmagnet.scm;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +16,7 @@ import com.techmagnet.scm.models.Role;
 import com.techmagnet.scm.repositories.RoleRepo;
 
 @SpringBootApplication
+@EnableScheduling
 @Slf4j
 public class SmartContactManagerV2Service implements CommandLineRunner {
 
